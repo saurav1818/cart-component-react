@@ -1,0 +1,10 @@
+.cart {
+  display: flex;
+  flex-direction: column;
+}
+
+.cart_value {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

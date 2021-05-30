@@ -1,0 +1,11 @@
+.cart {
+  display: flex;
+  background-color: aqua;
+  border-radius: 16px;
+  padding: 8px;
+}
+
+.items {
+  background-color: bisque;
+  margin-left: 8px;
+}
