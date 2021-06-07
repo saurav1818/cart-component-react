@@ -1,11 +1,21 @@
+import { useContext } from "react";
+import { OrdersContext } from "../store/order-context";
 import styles from "./Header.module.css";
-import Cart from "./FullCart";
+import FullCart from "./FullCart";
 
-const Header = (props) => {
+const Header = () => {
+  const ctx = useContext(OrdersContext);
   return (
     <div className={styles.header}>
-      <h1 onClick={props.hideCart}>React Meals</h1>
-      <Cart totalOrders={props.totalOrders} cartShow={props.showCart} />
+      <h1
+        onClick={() => {
+          ctx.setShowCart(false);
+        }}
+      >
+        React Meals
+      </h1>
+      <FullCart />
+      {/* <h4>Cart: {ctx.orders.length}</h4> */}
     </div>
   );
 };

@@ -1,6 +1,9 @@
-.meal {
+.meals_list {
+  list-style-type: none;
   display: flex;
   justify-content: space-around;
-  align-items: center;
-  border: 1px solid red;
+}
+
+.meals_item {
+  font-size: 24px;
 }

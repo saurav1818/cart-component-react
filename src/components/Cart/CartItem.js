@@ -1,51 +1,69 @@
-import { useState, useEffect } from "react";
-import styles from "./CartItem.module.css";
+import { useState, useContext, useEffect } from "react";
+import { OrdersContext } from "../store/order-context";
+
 const CartItem = (props) => {
-  console.log("CartItem");
-  const attributes = { ...props };
-  console.log(attributes.items);
-  const [value, setValue] = useState(attributes.items);
+  console.log("Re-render");
+  const orderDetails = { ...props };
+  console.log(orderDetails.items);
+  const ctx = useContext(OrdersContext);
+
+  console.log(orderDetails);
+
+  const [noOfOrders, setNoOfOrders] = useState(orderDetails.items);
 
   useEffect(() => {
-    setValue(attributes.items);
-  }, [attributes.items]);
+    setNoOfOrders(orderDetails.items);
+  }, [orderDetails.items]);
 
   useEffect(() => {
-    if (value === 0) {
-      props.onRemoveItem(attributes.id);
-    }
-  }, [value, attributes.id]);
+    ctx.setOrders((prevState) => {
+      if (noOfOrders !== 0) {
+        const newState = [...prevState];
+        for (let i = 0; i < newState.length; i++) {
+          if (newState[i].id === orderDetails.id) {
+            newState[i].items = noOfOrders;
+          }
+        }
+        return newState;
+      } else if (noOfOrders === 0) {
+        const newState = [...prevState];
+        let index = -1;
+        for (let i = 0; i < newState.length; i++) {
+          if (newState[i].id === orderDetails.id) {
+            index = i;
+            break;
+          }
+        }
+
+        newState.splice(index, 1);
+        return newState;
+      }
+    });
+  }, [noOfOrders]);
+  const decrementHandler = () => {
+    console.log("Trigerred");
+    setNoOfOrders((prevState) => {
+      return prevState - 1;
+    });
+  };
 
   const incrementHandler = () => {
-    setValue((prevState) => {
+    console.log("Trigerred");
+    setNoOfOrders((prevState) => {
       return parseInt(prevState) + 1;
     });
   };
 
-  const decrementHandler = () => {
-    setValue((prevState) => {
-      return parseInt(prevState) - 1;
-    });
-  };
-
-  // if (value === 0) {
-  //   props.onRemoveItem(attributes.id);
-  // }
-
   return (
-    <div className={styles.main_container}>
-      <div className={styles.item}>
-        <h4>{attributes.name}</h4>
-        <h6>{attributes.price}</h6>
-      </div>
-      <div>
-        {/* {console.log(value)} */}
-        <button onClick={incrementHandler}>+</button>
-        <input type="number" value={value} readOnly />
+    <ul>
+      <li>{orderDetails.name}</li>
+      <li>{orderDetails.price}</li>
+      <li>
         <button onClick={decrementHandler}>-</button>
-      </div>
-    </div>
+        <input type="text" value={noOfOrders} readOnly />
+        <button onClick={incrementHandler}>+</button>
+      </li>
+    </ul>
   );
 };
-
 export default CartItem;

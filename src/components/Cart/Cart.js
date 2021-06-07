@@ -1,41 +1,43 @@
+import { useContext } from "react";
+import { OrdersContext } from "../store/order-context";
 import CartItem from "./CartItem";
-import styles from "./Cart.module.css";
-const Cart = (props) => {
-  console.log("Cart");
-  console.log(props.orders);
-  const removeItem = (id) => {
-    props.onRemoveOrder(id);
-  };
 
-  const addItem = (id, items) => {
-    props.onAddNewOrder(id, items);
-  };
+const Cart = () => {
+  const ctx = useContext(OrdersContext);
+  // let amount = 0;
+  // useEffect(() => {
+  //   console.log("triggered");
+  //   ctx.orders.forEach((order) => {
+  //     let a = parseInt(order.items);
+  //     let b = order.price * a;
+  //     amount += b;
+  //     console.log(amount);
+  //   });
+  // }, [ctx.orders]);
 
-  const totalCost = () => {
-    let totalAmount = 0;
-    props.orders.forEach((order) => {
-      totalAmount += parseInt(order.items) * parseInt(order.price);
+  const amount = () => {
+    let amt = 0;
+    ctx.orders.forEach((order) => {
+      let a = parseInt(order.items);
+      let b = order.price * a;
+      amt += b;
     });
-    return totalAmount;
+    return amt;
   };
 
   return (
-    <div className={styles.main_container}>
-      {props.orders.map((order) => {
-        return (
-          <CartItem
-            key={order.id}
-            id={order.id}
-            name={order.name}
-            price={order.price}
-            items={order.items}
-            onRemoveItem={removeItem}
-          />
-        );
-      })}
+    <div style={{ backgroundColor: "green" }}>
+      {ctx.orders.map((order) => (
+        <CartItem
+          key={order.id}
+          items={order.items}
+          name={order.name}
+          price={order.price}
+          id={order.id}
+        />
+      ))}
       <div>
-        <h1>Total Amount</h1>
-        <h3>a</h3>
+        <h1>Total Amount: {amount()}</h1>
       </div>
     </div>
   );
